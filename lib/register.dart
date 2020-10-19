@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:test_app/database/voter_profile.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -12,12 +14,19 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register>{
+
   Future<Voter_Profile> _futureVoter_Profile;
   TextEditingController voterIdCTRL, usernameCTRL, nameCTRL, passwordCTRL,
       confirm_passCTRL, emailCTRL, ageCTRL, phone_numCTRL;
+  String status = '';
+  Future<File> file;
+  String base64Image;
+  File tmpFile;
+  String errMessage = 'Error Uploading Image';
+  var theUrl = 'http://192.168.0.158/fyp_db/register.php';
 
   Future<Voter_Profile> registerUser(String voter_id, String username, String name, String password, String confirm_pass, String email, int age, int phone_number ) async {
-    var theUrl = 'http://192.168.0.158/fyp_db/register.php';
+    //var theUrl = 'http://192.168.0.158/fyp_db/register.php';
 
     var body = json.encode(<String, String>{"voter_id" : voterIdCTRL.text,
       "username" : usernameCTRL.text,
@@ -30,7 +39,7 @@ class _RegisterState extends State<Register>{
 
     var response = await http.post(theUrl, body: body);
 
-    print(response.body.toString());
+    //print(response.body.toString());
 
     if(json.decode(response.body.toString()) == "Account already exists!"){
       Fluttertoast.showToast(
@@ -90,6 +99,8 @@ class _RegisterState extends State<Register>{
 
   @override
   Widget build(BuildContext context) {
+    final _screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         body: ListView(
