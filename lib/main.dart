@@ -26,16 +26,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  //getMethod() async {
-  //  String theUrl = 'http://localhost/fyp_db/getData.php';
-  //  var res = await http.get(Url.encodeFull(theUrl), headers: {"Accept" : "application/json"});
-  //  var responBody = json.decode(res.body);
-  //  print(responBody);
-//
-  //  return responBody;
-  //}
-
   TextEditingController usernameCTRL, passwordCTRL;
 
   void initState(){
