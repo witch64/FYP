@@ -6,7 +6,6 @@ import 'package:test_app/hompage.dart';
 import 'package:test_app/register.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
@@ -82,154 +81,181 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final _loginForm = GlobalKey<FormState>();
 
-    return new Scaffold(
-      resizeToAvoidBottomPadding: false,
-      body: ListView(
-        //crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
-                  child: Text(
-                    'Hello',
-                    style: TextStyle(
+    return new Form(
+      key: _loginForm,
+      //resizeToAvoidBottomPadding: false,
+      child: Scaffold(
+        resizeToAvoidBottomPadding: false,
+        body: ListView(
+          //crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
+                    child: Text(
+                      'Hello',
+                      style: TextStyle(
+                          fontSize: 80.0,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(15.0, 175.0, 0.0, 0.0),
+                    child: Text(
+                      'There',
+                      style: TextStyle(
+                          fontSize: 80.0,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(220.0, 175.0, 0.0, 0.0),
+                    child: Text(
+                      '.',
+                      style: TextStyle(
                         fontSize: 80.0,
-                        fontWeight: FontWeight.bold
+                        fontWeight: FontWeight.bold,
+                        color: Colors.indigoAccent,
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(15.0, 175.0, 0.0, 0.0),
-                  child: Text(
-                    'There',
-                    style: TextStyle(
-                        fontSize: 80.0,
-                        fontWeight: FontWeight.bold
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(220.0, 175.0, 0.0, 0.0),
-                  child: Text(
-                    '.',
-                    style: TextStyle(
-                      fontSize: 80.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.indigoAccent,
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Container(
-            height: 500,
-            padding: EdgeInsets.only(top:35.0, left:20.0, right : 20.0),
-            child: Column(
-              children: <Widget>[
-                TextField(
-                  controller: usernameCTRL,
-                  decoration: InputDecoration(
-                    labelText: 'USERNAME',
-                    labelStyle: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
+            Container(
+              height: 500,
+              padding: EdgeInsets.only(top:35.0, left:20.0, right : 20.0),
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    controller: usernameCTRL,
+                    decoration: InputDecoration(
+                      labelText: 'USERNAME',
+                      labelStyle: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.indigoAccent),
+                      ),
                     ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.indigoAccent),
-                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter username';
+                      }
+                      return null;
+                    },
                   ),
-                ),
-                SizedBox(height: 20.0),
-                TextField(
-                 controller: passwordCTRL,
-                  decoration: InputDecoration(
-                    labelText: 'PASSWORD',
-                    labelStyle: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
+                  SizedBox(height: 20.0),
+                  TextFormField(
+                   controller: passwordCTRL,
+                    decoration: InputDecoration(
+                      labelText: 'PASSWORD',
+                      labelStyle: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.indigoAccent),
+                      ),
                     ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.indigoAccent),
-                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter password';
+                      }
+                      return null;
+                    },
+                    obscureText: true,
                   ),
-                  obscureText: true,
-                ),
-                SizedBox(height: 5.0),
-                Container(
-                  alignment: Alignment(1.0, 0.0),
-                  padding: EdgeInsets.only(top:15.0, left:20.0),
-                  child: InkWell(
-                      child: Text(
-                        'Forgot Password',
-                        style: TextStyle(
-                          color: Colors.indigoAccent,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
-                        ),
-                      )
-                  ),
-                ),
-                SizedBox(height: 40.0),
-                Container(
-                  height: 50.0,
-                  child: Material(
-                    borderRadius: BorderRadius.circular(30.0),
-                    color: Colors.indigoAccent,
-                    shadowColor: Colors.indigo,
-                    elevation: 7.0,
-                    child: GestureDetector(
-                      onTap: () {
-                       userLogin();
-                      },
-                      child: Center(
+                  SizedBox(height: 5.0),
+                  Container(
+                    alignment: Alignment(1.0, 0.0),
+                    padding: EdgeInsets.only(top:15.0, left:20.0),
+                    child: InkWell(
                         child: Text(
-                          'LOGIN',
+                          'Forgot Password',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.indigoAccent,
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                          ),
+                        )
+                    ),
+                  ),
+                  SizedBox(height: 40.0),
+                  Container(
+                    height: 50.0,
+                    child: Material(
+                      borderRadius: BorderRadius.circular(30.0),
+                      color: Colors.indigoAccent,
+                      shadowColor: Colors.indigo,
+                      elevation: 7.0,
+                      child: GestureDetector(
+                        onTap: () {
+                          if(_loginForm.currentState.validate()){
+                            userLogin();
+                          }else{
+                            Fluttertoast.showToast(
+                                msg: "Please check the error message!",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+                          }
+                        },
+                        child: Center(
+                          child: Text(
+                            'LOGIN',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 20.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'New User ? ',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                      ),
-                    ),
-                    SizedBox(height: 20.0),
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context).pushNamed('/register');
-                      },
-                      child: Text('Register',
+                  SizedBox(height: 20.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'New User ? ',
                         style: TextStyle(
-                          color: Colors.indigoAccent,
                           fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
                         ),
                       ),
-                    )
-                  ],
-                ),
-              ],
+                      SizedBox(height: 20.0),
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).pushNamed('/register');
+                        },
+                        child: Text('Register',
+                          style: TextStyle(
+                            color: Colors.indigoAccent,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

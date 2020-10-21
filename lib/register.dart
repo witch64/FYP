@@ -28,7 +28,6 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final _registerForm = GlobalKey<FormState>();
-  Future<Voter_Profile> _futureVoter_Profile;
   TextEditingController usernameCTRL,
       nameCTRL,
       passwordCTRL,
@@ -80,18 +79,6 @@ class _RegisterState extends State<Register> {
       int age,
       int phone_number,
       File imageFile) async {
-    var theUrl = 'http://192.168.0.158/fyp_db/register.php';
-
-    var body = json.encode(<String, String>{
-      "username": usernameCTRL.text,
-      "name": nameCTRL.text,
-      "password": passwordCTRL.text,
-      "confirm_password": confirm_passCTRL.text,
-      "email": emailCTRL.text,
-      "age": ageCTRL.text,
-      "phone_number": phone_numCTRL.text,
-    });
-
 
     var stream = new http.ByteStream(DelegatingStream(imageFile.openRead()));
     var length = await imageFile.length();
@@ -451,8 +438,6 @@ class _RegisterState extends State<Register> {
                                         textColor: Colors.white,
                                         fontSize: 16.0);
                                   }
-
-
                                 },
                                 child: Center(
                                   child: Text(
