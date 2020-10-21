@@ -1,7 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:test_app/register.dart';
+import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,22 +30,49 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  TextEditingController usernameCTRL, passwordCTRL;
+  //TextEditingController usernameCTRL = TextEditingController();
+  //TextEditingController passwordCTRL = TextEditingController();
 
-  void initState(){
-    super.initState();
+  //ture userLogin() async{
+  //var theUrl = "http://192.168.0.158/fyp_db/login.php";
+  //var data = {
+  //  "username": usernameCTRL.text,
+  //  "password": passwordCTRL.text,
+  //};
 
-    usernameCTRL = new TextEditingController();
-    passwordCTRL = new TextEditingController();
-  }
+  //var response = await http.post(theUrl, body: data);
 
+  //print(json.decode(response.body.toString()));
+
+  //if(json.decode(response.body.toString()) == "Account does not exist!"){
+  //  Fluttertoast.showToast(
+  //        msg: "Please create an account!",
+  //      toastLength: Toast.LENGTH_SHORT,
+  //      gravity: ToastGravity.CENTER,
+  //      timeInSecForIosWeb: 1,
+  //      backgroundColor: Colors.red,
+  //      textColor: Colors.white,
+  //      fontSize: 16.0);
+  //}else if((json.decode(response.body.toString()) == "False")){
+  //  Fluttertoast.showToast(
+  //      msg: "Incorrect Password!",
+  //      toastLength: Toast.LENGTH_SHORT,
+  //      gravity: ToastGravity.CENTER,
+  //      timeInSecForIosWeb: 1,
+  //      backgroundColor: Colors.red,
+  //      textColor: Colors.white,
+  //      fontSize: 16.0);
+  //}
+
+
+  //}
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(
+        //crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
             child: Stack(
@@ -85,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               children: <Widget>[
                 TextField(
-                  controller: usernameCTRL,
+                  //controller: usernameCTRL,
                   decoration: InputDecoration(
                     labelText: 'USERNAME',
                     labelStyle: TextStyle(
@@ -100,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 SizedBox(height: 20.0),
                 TextField(
-                  controller: passwordCTRL,
+                 // controller: passwordCTRL,
                   decoration: InputDecoration(
                     labelText: 'PASSWORD',
                     labelStyle: TextStyle(
@@ -139,7 +170,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     shadowColor: Colors.indigo,
                     elevation: 7.0,
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                       // userLogin();
+                      },
                       child: Center(
                         child: Text(
                           'LOGIN',

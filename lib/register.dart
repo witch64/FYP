@@ -12,7 +12,14 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:math' as Math;
 import 'package:async/async.dart';
-import 'package:http/http.dart' as http;
+import 'package:email_validator/email_validator.dart';
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp();
+  }
+}
 
 class Register extends StatefulWidget {
   @override
@@ -20,9 +27,9 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  final _registerForm = GlobalKey<FormState>();
   Future<Voter_Profile> _futureVoter_Profile;
-  TextEditingController voterIdCTRL,
-      usernameCTRL,
+  TextEditingController usernameCTRL,
       nameCTRL,
       passwordCTRL,
       confirm_passCTRL,
@@ -32,6 +39,18 @@ class _RegisterState extends State<Register> {
   String status = '';
   Future<File> file;
   File _image;
+
+  @override
+  void dispose() {
+    usernameCTRL.dispose();
+    nameCTRL.dispose();
+    passwordCTRL.dispose();
+    confirm_passCTRL.dispose();
+    emailCTRL.dispose();
+    ageCTRL.dispose();
+    phone_numCTRL.dispose();
+    super.dispose();
+  }
 
   Future getImageGallery() async {
     var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -53,7 +72,6 @@ class _RegisterState extends State<Register> {
   Future upload(File imageFile) async {}
 
   Future<Voter_Profile> registerUser(
-      String voter_id,
       String username,
       String name,
       String password,
@@ -65,7 +83,6 @@ class _RegisterState extends State<Register> {
     var theUrl = 'http://192.168.0.158/fyp_db/register.php';
 
     var body = json.encode(<String, String>{
-      "voter_id": voterIdCTRL.text,
       "username": usernameCTRL.text,
       "name": nameCTRL.text,
       "password": passwordCTRL.text,
@@ -75,7 +92,8 @@ class _RegisterState extends State<Register> {
       "phone_number": phone_numCTRL.text,
     });
 
-    var stream = new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+
+    var stream = new http.ByteStream(DelegatingStream(imageFile.openRead()));
     var length = await imageFile.length();
     var uri = Uri.parse("http://192.168.0.158/fyp_db/register.php");
 
@@ -99,15 +117,9 @@ class _RegisterState extends State<Register> {
     var response = await http.Response.fromStream(sentStream);
     print(response.body.toString());
 
-    if (response.statusCode == 200) {
-      print("Upload Successfully!");
-    } else {
-      print("Upload Failed!");
-    }
-
     if (json.decode(response.body.toString()) == "Account already exists!") {
       Fluttertoast.showToast(
-          msg: "Email Exists. Please try again!",
+          msg: "Email, Phone Number or Username Exists. Please try again!",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
@@ -139,7 +151,6 @@ class _RegisterState extends State<Register> {
   void initState() {
     super.initState();
 
-    voterIdCTRL = new TextEditingController();
     usernameCTRL = new TextEditingController();
     nameCTRL = new TextEditingController();
     passwordCTRL = new TextEditingController();
@@ -149,7 +160,6 @@ class _RegisterState extends State<Register> {
     phone_numCTRL = new TextEditingController();
 
     registerUser(
-        voterIdCTRL.text,
         usernameCTRL.text,
         nameCTRL.text,
         passwordCTRL.text,
@@ -160,233 +170,330 @@ class _RegisterState extends State<Register> {
         _image);
   }
 
+  String validateEmail(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return 'Enter Valid Email';
+    else
+      return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _screenSize = MediaQuery.of(context).size;
-
-    return Scaffold(
-        resizeToAvoidBottomPadding: false,
-        body: ListView(
-            // crossAxisAlignment: CrossAxisAlignment.start,
-            padding: EdgeInsets.all(15),
-            children: <Widget>[
-              Container(
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
-                      child: Text(
-                        'Create An',
-                        style: TextStyle(
-                            fontSize: 50.0, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(15.0, 170.0, 0.0, 0.0),
-                      child: Text(
-                        'New Account',
-                        style: TextStyle(
-                            fontSize: 50.0, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(315.0, 170.0, 0.0, 0.0),
-                      child: Text(
-                        '.',
-                        style: TextStyle(
-                            fontSize: 50.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.indigoAccent),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                  height: 1200,
-                  padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
-                  child: Column(
+    return Form(
+      key: _registerForm,
+        child :Scaffold(
+            resizeToAvoidBottomPadding: false,
+          body: ListView(
+              //crossAxisAlignment: CrossAxisAlignment.start,
+              //padding: EdgeInsets.all(15),
+              children: <Widget>[
+                Container(
+                  child: Stack(
                     children: <Widget>[
-                      Card(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            Center(
-                              child: _image == null
-                                  ? new Text("No image selected. ")
-                                  : new Image.file(_image),
-                            ),
-                            OutlineButton(
-                              onPressed: getImageGallery,
-                              child: Text('Choose Image'),
-                            ),
-                          ],
+                      Container(
+                        padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
+                        child: Text(
+                          'Create An',
+                          style: TextStyle(
+                              fontSize: 50.0, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      SizedBox(height: 10.0),
-                      TextField(
-                        controller: usernameCTRL,
-                        decoration: InputDecoration(
-                            hintText: 'Username',
-                            labelText: 'USERNAME',
-                            labelStyle: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.indigoAccent))),
-                      ),
-                      SizedBox(height: 10.0),
-                      TextField(
-                        controller: nameCTRL,
-                        decoration: InputDecoration(
-                            hintText: 'Name',
-                            labelText: 'NAME',
-                            labelStyle: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.indigoAccent))),
-                      ),
-                      SizedBox(height: 10.0),
-                      TextField(
-                        controller: passwordCTRL,
-                        decoration: InputDecoration(
-                            hintText: 'Password',
-                            labelText: 'PASSWORD',
-                            labelStyle: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.indigoAccent))),
-                        obscureText: true,
-                      ),
-                      SizedBox(height: 10.0),
-                      TextField(
-                        controller: confirm_passCTRL,
-                        decoration: InputDecoration(
-                            hintText: 'Confirm Password',
-                            labelText: 'CONFIRM PASSWORD ',
-                            labelStyle: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.indigoAccent))),
-                        obscureText: true,
-                      ),
-                      SizedBox(height: 10.0),
-                      TextField(
-                        controller: emailCTRL,
-                        decoration: InputDecoration(
-                            hintText: 'Email',
-                            labelText: 'EMAIL',
-                            labelStyle: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.indigoAccent))),
-                      ),
-                      SizedBox(height: 10.0),
-                      TextField(
-                        controller: ageCTRL,
-                        decoration: InputDecoration(
-                            hintText: 'Age',
-                            labelText: 'AGE',
-                            labelStyle: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.indigoAccent))),
-                      ),
-                      SizedBox(height: 10.0),
-                      TextField(
-                        controller: phone_numCTRL,
-                        decoration: InputDecoration(
-                            hintText: 'Phone Number',
-                            labelText: 'PHONE NUMBER',
-                            labelStyle: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.indigoAccent))),
-                      ),
-                      SizedBox(height: 50.0),
                       Container(
-                          height: 50.0,
-                          child: Material(
-                            borderRadius: BorderRadius.circular(30.0),
-                            shadowColor: Colors.indigo,
-                            color: Colors.indigoAccent,
-                            elevation: 7.0,
-                            child: GestureDetector(
-                              onTap: () {
-                                registerUser(
-                                    voterIdCTRL.text,
-                                    usernameCTRL.text,
-                                    nameCTRL.text,
-                                    passwordCTRL.text,
-                                    confirm_passCTRL.text,
-                                    emailCTRL.text,
-                                    int.parse(ageCTRL.text,
-                                        onError: (source) => -1),
-                                    int.parse(phone_numCTRL.text,
-                                        onError: (source) => -1),
-                                    _image);
+                        padding: EdgeInsets.fromLTRB(15.0, 170.0, 0.0, 0.0),
+                        child: Text(
+                          'New Account',
+                          style: TextStyle(
+                              fontSize: 50.0, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(315.0, 170.0, 0.0, 0.0),
+                        child: Text(
+                          '.',
+                          style: TextStyle(
+                              fontSize: 50.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.indigoAccent),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                    height: 1500,
+                    padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
+                    child: Column(
+                      children: <Widget>[
+                        Card(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              Center(
+                                child: _image == null
+                                    ? new Text("No image selected. ",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),)
+                                    : new Image.file(_image),
+                              ),
+                              OutlineButton(
+                                onPressed: getImageGallery,
+                                child: Text('Choose Image'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                         TextFormField(
+                            controller: usernameCTRL,
+                            decoration: InputDecoration(
+                                hintText: 'Username',
+                                labelText: 'USERNAME',
+                                labelStyle: TextStyle(
+                                    color: Colors.grey),
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.indigoAccent)
+                                ),
+                            ),
+                            textInputAction: TextInputAction.next,
+                             validator: (value) {
+                               if (value.isEmpty) {
+                                 return 'Please enter username';
+                               }else if(value.length < 6){
+                                 return 'Username must be more than 10 character';
+                               }
+                               return null;
+                             },
+                          ),
+                        SizedBox(height: 10.0),
+                        TextFormField(
+                          controller: nameCTRL,
+                          decoration: InputDecoration(
+                              hintText: 'Name',
+                              labelText: 'NAME',
+                              labelStyle: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.indigoAccent))
+                          ),
+                          textInputAction: TextInputAction.next,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter name';
+                              }else if(value.length < 10){
+                                return 'Name must be more than 10 character';
+                              }
+                              return null;
+                            },
+                        ),
+                        SizedBox(height: 10.0),
+                        TextFormField(
+                          controller: passwordCTRL,
+                          decoration: InputDecoration(
+                              hintText: 'Password',
+                              labelText: 'PASSWORD',
+                              labelStyle: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.indigoAccent))
+                          ),
+                          textInputAction: TextInputAction.next,
+                          obscureText: true,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter password';
+                            }else if(value.length < 6){
+                              return 'Password must more than 6 digit';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 10.0),
+                        TextFormField(
+                          controller: confirm_passCTRL,
+                          decoration: InputDecoration(
+                              hintText: 'Confirm Password',
+                              labelText: 'CONFIRM PASSWORD ',
+                              labelStyle: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.indigoAccent))),
+                          obscureText: true,
+                          textInputAction: TextInputAction.next,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter confirm password';
+                            }else if(value != passwordCTRL.text){
+                              return "Incorrect Password";
+                            }else if(value.length < 6){
+                              return 'Password must be more than 6 digit';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 10.0),
+                        TextFormField(
+                          controller: emailCTRL,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                              hintText: 'Email',
+                              labelText: 'EMAIL',
+                              labelStyle: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.indigoAccent))
+                          ),
+                          textInputAction: TextInputAction.next,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter email';
+                            }else if(value.isNotEmpty){
+                              validateEmail(value);
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 10.0),
+                        TextFormField(
+                          controller: ageCTRL,
+                          keyboardType: TextInputType.phone,
+                          decoration: InputDecoration(
+                              hintText: 'Age',
+                              labelText: 'AGE',
+                              labelStyle: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.indigoAccent))
+                          ),
+                          textInputAction: TextInputAction.next,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter age';
+                            }else if(int.parse(ageCTRL.text) < 17){
+                              return "Invalid Age";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 10.0),
+                        TextFormField(
+                          controller: phone_numCTRL,
+                          keyboardType: TextInputType.phone,
+                          decoration: InputDecoration(
+                              hintText: 'Phone Number',
+                              labelText: 'PHONE NUMBER',
+                              labelStyle: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.indigoAccent))
+                          ),
+                          textInputAction: TextInputAction.done,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please enter phone number';
+                            }else if(value.length != 10){
+                              return 'Mobile Number must be of 10 digit';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 50.0),
+                        Container(
+                            height: 50.0,
+                            child: Material(
+                              borderRadius: BorderRadius.circular(30.0),
+                              shadowColor: Colors.indigo,
+                              color: Colors.indigoAccent,
+                              elevation: 7.0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  if(_registerForm.currentState.validate()){
+                                    registerUser(
+                                        usernameCTRL.text,
+                                        nameCTRL.text,
+                                        passwordCTRL.text,
+                                        confirm_passCTRL.text,
+                                        emailCTRL.text,
+                                        int.parse(ageCTRL.text,
+                                            onError: (source) => -1),
+                                        int.parse(phone_numCTRL.text,
+                                            onError: (source) => -1),
+                                        _image);
+                                  }else{
+                                    Fluttertoast.showToast(
+                                        msg: "Please check the error message!",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  }
 
-                                // upload(_image);
-                              },
-                              child: Center(
-                                child: Text(
-                                  'REGISTER',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Montserrat'),
+
+                                },
+                                child: Center(
+                                  child: Text(
+                                    'REGISTER',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat'),
+                                  ),
                                 ),
                               ),
-                            ),
-                          )),
-                      SizedBox(height: 20.0),
-                      Container(
-                        height: 50.0,
-                        color: Colors.transparent,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.black,
-                                  style: BorderStyle.solid,
-                                  width: 1.0),
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.circular(30.0)),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Center(
-                              child: Text('Go Back',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Montserrat')),
+                            )),
+                        SizedBox(height: 20.0),
+                        Container(
+                          height: 50.0,
+                          color: Colors.transparent,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Colors.black,
+                                    style: BorderStyle.solid,
+                                    width: 1.0),
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(30.0)),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Center(
+                                child: Text('Go Back',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat')),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 30.0),
-                    ],
-                  )),
-            ]));
+                        SizedBox(height: 30.0),
+                      ],
+                    )),
+              ]),
+        ));
   }
 }
