@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:test_app/hompage.dart';
 import 'package:test_app/register.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,42 +31,52 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  //TextEditingController usernameCTRL = TextEditingController();
-  //TextEditingController passwordCTRL = TextEditingController();
+  TextEditingController usernameCTRL = TextEditingController();
+  TextEditingController passwordCTRL = TextEditingController();
 
-  //ture userLogin() async{
-  //var theUrl = "http://192.168.0.158/fyp_db/login.php";
-  //var data = {
-  //  "username": usernameCTRL.text,
-  //  "password": passwordCTRL.text,
-  //};
+  Future userLogin() async{
+  var theUrl = "http://192.168.0.158/fyp_db/login.php";
+  var data = {
+    "username": usernameCTRL.text,
+    "password": passwordCTRL.text,
+  };
 
-  //var response = await http.post(theUrl, body: data);
+  var response = await http.post(theUrl, body: data);
 
-  //print(json.decode(response.body.toString()));
+  print(json.decode(response.body.toString()));
 
-  //if(json.decode(response.body.toString()) == "Account does not exist!"){
-  //  Fluttertoast.showToast(
-  //        msg: "Please create an account!",
-  //      toastLength: Toast.LENGTH_SHORT,
-  //      gravity: ToastGravity.CENTER,
-  //      timeInSecForIosWeb: 1,
-  //      backgroundColor: Colors.red,
-  //      textColor: Colors.white,
-  //      fontSize: 16.0);
-  //}else if((json.decode(response.body.toString()) == "False")){
-  //  Fluttertoast.showToast(
-  //      msg: "Incorrect Password!",
-  //      toastLength: Toast.LENGTH_SHORT,
-  //      gravity: ToastGravity.CENTER,
-  //      timeInSecForIosWeb: 1,
-  //      backgroundColor: Colors.red,
-  //      textColor: Colors.white,
-  //      fontSize: 16.0);
-  //}
+  if(json.decode(response.body.toString()) == "Account does not exist!"){
+    Fluttertoast.showToast(
+          msg: "Please create an account!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }else if((json.decode(response.body.toString()) == "False")){
+    Fluttertoast.showToast(
+        msg: "Incorrect Password!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }else{
+    Fluttertoast.showToast(
+        msg: "Login Successfully!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Homepage()));
+  }
 
 
-  //}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               children: <Widget>[
                 TextField(
-                  //controller: usernameCTRL,
+                  controller: usernameCTRL,
                   decoration: InputDecoration(
                     labelText: 'USERNAME',
                     labelStyle: TextStyle(
@@ -131,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 SizedBox(height: 20.0),
                 TextField(
-                 // controller: passwordCTRL,
+                 controller: passwordCTRL,
                   decoration: InputDecoration(
                     labelText: 'PASSWORD',
                     labelStyle: TextStyle(
@@ -171,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     elevation: 7.0,
                     child: GestureDetector(
                       onTap: () {
-                       // userLogin();
+                       userLogin();
                       },
                       child: Center(
                         child: Text(
