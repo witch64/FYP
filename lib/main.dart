@@ -6,6 +6,7 @@ import 'package:test_app/hompage.dart';
 import 'package:test_app/register.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import './forgotPassword.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        '/register' : (BuildContext context) => new Register()
+        '/register' : (BuildContext context) => new Register(),
+        '/forgotPassword' : (BuildContext context) => new ForgotPasswordPage(),
       },
       home: new MyHomePage(),
     );
@@ -73,8 +75,6 @@ class _MyHomePageState extends State<MyHomePage> {
         fontSize: 16.0);
     Navigator.push(context, MaterialPageRoute(builder: (context) => Homepage()));
   }
-
-
   }
 
   @override
@@ -178,6 +178,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     alignment: Alignment(1.0, 0.0),
                     padding: EdgeInsets.only(top:15.0, left:20.0),
                     child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).pushNamed('/forgotPassword');
+                        },
                         child: Text(
                           'Forgot Password',
                           style: TextStyle(

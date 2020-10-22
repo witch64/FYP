@@ -174,8 +174,6 @@ class _RegisterState extends State<Register> {
         child :Scaffold(
             resizeToAvoidBottomPadding: false,
           body: ListView(
-              //crossAxisAlignment: CrossAxisAlignment.start,
-              //padding: EdgeInsets.all(15),
               children: <Widget>[
                 Container(
                   child: Stack(
@@ -240,7 +238,8 @@ class _RegisterState extends State<Register> {
                                 hintText: 'Username',
                                 labelText: 'USERNAME',
                                 labelStyle: TextStyle(
-                                    color: Colors.grey),
+                                    color: Colors.grey,
+                                fontWeight: FontWeight.bold,),
                                 focusedBorder: UnderlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Colors.indigoAccent)
@@ -301,6 +300,8 @@ class _RegisterState extends State<Register> {
                               return 'Please enter password';
                             }else if(value.length < 6){
                               return 'Password must more than 6 digit';
+                            }else if(value.length > 12){
+                              return 'Password must not more than 12 digit';
                             }
                             return null;
                           },
@@ -327,6 +328,8 @@ class _RegisterState extends State<Register> {
                               return "Incorrect Password";
                             }else if(value.length < 6){
                               return 'Password must be more than 6 digit';
+                            }else if(value.length > 12){
+                              return 'Password must not more than 12 digit';
                             }
                             return null;
                           },
