@@ -35,10 +35,9 @@ class _RegisterState extends State<Register> {
       emailCTRL,
       ageCTRL,
       phone_numCTRL;
-  String status = '';
+
   Future<File> file;
   File _image;
-  final picker = ImagePicker();
   
   @override
   void dispose() {

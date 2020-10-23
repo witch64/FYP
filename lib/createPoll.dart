@@ -35,6 +35,7 @@ class _CreatePollsPageState extends State<CreatePollsPage> {
   File _image;
 
   Future getImageGallery() async {
+    //var imageFile = await picker.getImage(source: ImageSource.gallery);
     var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     final tempDir = await getTemporaryDirectory();
