@@ -16,18 +16,24 @@ class MyApp extends StatelessWidget {
 }
 
 class CreateNewPasswordPage extends StatefulWidget {
+  String passedValue = "";
+
+  CreateNewPasswordPage({Key  key, this.passedValue}) : super(key: key);
   @override
-  _CreateNewPasswordPageState createState() => _CreateNewPasswordPageState();
+  _CreateNewPasswordPageState createState() => _CreateNewPasswordPageState(passedValue);
 }
 
 class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
+  String passedValue = "";
+  _CreateNewPasswordPageState(this.passedValue);
+
   final _createNewPasswordForm = GlobalKey<FormState>();
   TextEditingController passwordCTRL = TextEditingController();
   TextEditingController confirm_passwordCTRL = TextEditingController();
-  String verifyLink;
+  //String verifyLink;
 
   Future resetPassword() async {
-    var theUrl = verifyLink;
+    var theUrl = passedValue;
     var body = {
       "password": passwordCTRL.text,
       "confirm_password": confirm_passwordCTRL.text,

@@ -50,15 +50,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       });
 
       Fluttertoast.showToast(
-          msg: "Success. Please create new password on the next page.",
+          msg: "Success. Please create new password.",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.green,
           textColor: Colors.white,
           fontSize: 16.0);
 
-      Navigator.push(context, MaterialPageRoute(builder: (context) => new CreateNewPasswordPage()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => new CreateNewPasswordPage(passedValue: verifyLink)));
     }
   }
 
