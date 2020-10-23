@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
+import 'package:mailer/smtp_server/mailgun.dart';
 
 import 'createNewPassword.dart';
 
@@ -62,31 +63,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     }
   }
 
-  int newPass = 0;
-  Future resetPassword() async {
-    var response = await http.post(verifyLink);
-
-    setState(() {
-      newPass = json.decode(response.body.toString());
-    });
-    print(json.decode(response.body.toString()));
-
-    Fluttertoast.showToast(
-        msg: "Your password has been reset : $newPass",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
-  }
-
-
   sendMail() async {
-    String username = 'username@gmail.com';
-    String password = 'password';
+    String username = 'chnkaixin@gmail.com';
+    String password = 'mygmailacc';
 
-    final smtpServer = gmail(username, password);
+    final smtpServer = mailgun(username, password);
     // Use the SmtpServer class to configure an SMTP server:
     // final smtpServer = SmtpServer('smtp.domain.com');
     // See the named arguments of SmtpServer for further configuration
@@ -95,7 +76,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     // Create our message.
     final message = Message()
       ..from = Address(username)
-      ..recipients.add('destination@example.com')
+      ..recipients.add(emailCTRL.text)
     //..ccRecipients.addAll(['destCc1@example.com', 'destCc2@example.com'])
     //..bccRecipients.add(Address('bccAddress@example.com'))
       ..subject = 'Password Recover link: ${DateTime.now()}'
@@ -105,14 +86,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
     try {
       final sendReport = await send(message, smtpServer);
+      Fluttertoast.showToast(
+          msg: "Message send. Please check your email.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey,
+          textColor: Colors.black,
+          fontSize: 16.0);
       print('Message sent: ' + sendReport.toString());
     } on MailerException catch (e) {
-      print('Message not sent.');
-      for (var p in e.problems) {
-        print('Problem: ${p.code}: ${p.msg}');
+      print('Message not sent. \n' + e.toString());
       }
     }
-  }
 
   String validateEmail(String value) {
     Pattern pattern =

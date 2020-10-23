@@ -38,7 +38,8 @@ class _RegisterState extends State<Register> {
   String status = '';
   Future<File> file;
   File _image;
-
+  final picker = ImagePicker();
+  
   @override
   void dispose() {
     usernameCTRL.dispose();
@@ -52,6 +53,7 @@ class _RegisterState extends State<Register> {
   }
 
   Future getImageGallery() async {
+    //var imageFile = await picker.getImage(source: ImageSource.gallery);
     var imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     final tempDir = await getTemporaryDirectory();
@@ -68,7 +70,6 @@ class _RegisterState extends State<Register> {
     });
   }
 
-  Future upload(File imageFile) async {}
 
   Future<Voter_Profile> registerUser(
       String username,
@@ -80,8 +81,8 @@ class _RegisterState extends State<Register> {
       int phone_number,
       File imageFile) async {
 
-    var stream = new http.ByteStream(DelegatingStream(imageFile.openRead()));
-    var length = await imageFile.length();
+    var stream = new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+    var length = await imageFile.lengthSync();
     var uri = Uri.parse("http://192.168.0.158/fyp_db/register.php");
 
     var request = new http.MultipartRequest("post", uri);
@@ -419,7 +420,16 @@ class _RegisterState extends State<Register> {
                               elevation: 7.0,
                               child: GestureDetector(
                                 onTap: () {
-                                  if(_registerForm.currentState.validate()){
+                                  if(_image == null){
+                                    Fluttertoast.showToast(
+                                        msg: "Please select an image!",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  }else if(_registerForm.currentState.validate()){
                                     registerUser(
                                         usernameCTRL.text,
                                         nameCTRL.text,

@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.green,
         textColor: Colors.white,
         fontSize: 16.0);
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Homepage()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
   }
   }
 

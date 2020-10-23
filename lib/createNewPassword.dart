@@ -30,8 +30,8 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
   final _createNewPasswordForm = GlobalKey<FormState>();
   TextEditingController passwordCTRL = TextEditingController();
   TextEditingController confirm_passwordCTRL = TextEditingController();
-  //String verifyLink;
 
+  String newPass;
   Future resetPassword() async {
     var theUrl = passedValue;
     var body = {
@@ -40,6 +40,9 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
     };
 
     var response = await http.post(theUrl, body: body);
+    setState(() {
+      newPass = json.decode(response.body.toString());
+    });
 
     print(json.decode(response.body.toString()));
 
@@ -54,7 +57,7 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
           fontSize: 16.0);
     } else {
       Fluttertoast.showToast(
-          msg: "New Password Created!",
+          msg: "New Password Created! $newPass",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
@@ -176,7 +179,6 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
                             if(_createNewPasswordForm.currentState.validate()){
                                   resetPassword();
                             }
-
                           },
                           child: Center(
                             child: Text(
