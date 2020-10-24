@@ -65,7 +65,7 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
           textColor: Colors.white,
           fontSize: 16.0);
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => MyHomePage()));
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
     }
   }
 

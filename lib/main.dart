@@ -21,17 +21,17 @@ class MyApp extends StatelessWidget {
         '/register' : (BuildContext context) => new Register(),
         '/forgotPassword' : (BuildContext context) => new ForgotPasswordPage(),
       },
-      home: new MyHomePage(),
+      home: new LoginPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _LoginPageState extends State<LoginPage> {
   TextEditingController usernameCTRL = TextEditingController();
   TextEditingController passwordCTRL = TextEditingController();
 

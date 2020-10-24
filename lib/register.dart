@@ -14,6 +14,8 @@ import 'dart:math' as Math;
 import 'package:async/async.dart';
 import 'package:email_validator/email_validator.dart';
 
+import 'main.dart';
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -122,6 +124,7 @@ class _RegisterState extends State<Register> {
           backgroundColor: Colors.green,
           textColor: Colors.white,
           fontSize: 16.0);
+
     } else {
       Fluttertoast.showToast(
           msg: "Error, Please try again!",
@@ -440,6 +443,7 @@ class _RegisterState extends State<Register> {
                                         int.parse(phone_numCTRL.text,
                                             onError: (source) => -1),
                                         _image);
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
                                   }else{
                                     Fluttertoast.showToast(
                                         msg: "Please check the error message!",
