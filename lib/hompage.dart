@@ -27,33 +27,6 @@ class _HomePageState extends State<HomePage> {
   TextEditingController titleCTRL = TextEditingController();
   TextEditingController descCTRL = TextEditingController();
 
-  Stream pollStream;
-  //Widget pollList(){
-    // return Container(
-    //   child: FutureBuilder(
-    //     future: pollDetails(),
-    //     builder: (context, snapshot){
-    //       if(snapshot.hasError){
-    //         print(snapshot.error);
-    //       }
-    //       return snapshot.hasData ? ListView.builder(
-    //               itemCount: snapshot.data.length,
-    //               itemBuilder: (context, index){
-    //               List list = snapshot.data;
-    //               Image.network(
-    //                   "http://http://192.168.0.158/fyp_db/uploads/${list[index]['poll_pic']}");
-    //               return ListTile(
-    //                 title: Text(list[index]['title']),
-    //               );
-    //               })
-    //           : Center(
-    //         child: CircularProgressIndicator(),
-    //       );
-    //     },
-    //   ),
-    // );
-  //}
-
   Future pollDetails() async{
       var theUrl = "http://192.168.0.158/fyp_db/view.php";
       var response = await http.get(theUrl);
