@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'hompage.dart';
 
 class MyApp extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
     return Container();
@@ -15,11 +17,17 @@ class MyApp extends StatelessWidget {
 }
 
 class AddOptionPage extends StatefulWidget {
+  //String pollID;
+  //AddOptionPage({Key key, this.pollID}) : super(key: key);
+
   @override
   _AddOptionPageState createState() => _AddOptionPageState();
 }
 
 class _AddOptionPageState extends State<AddOptionPage> {
+  //String pollID;
+  //_AddOptionPageState(this.pollID);
+
   final _AddOptionPageForm = GlobalKey<FormState>();
   TextEditingController option1CTRL = new TextEditingController();
   TextEditingController option2CTRL = new TextEditingController();

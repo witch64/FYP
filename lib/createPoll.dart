@@ -95,7 +95,7 @@ class _CreatePollsPageState extends State<CreatePollsPage> {
     });
   }
 
-  Future<Polls> createpoll(
+  Future createpoll(
       String title,
       int age_limitation,
       File imageFile) async {
@@ -128,6 +128,7 @@ class _CreatePollsPageState extends State<CreatePollsPage> {
           backgroundColor: Colors.green,
           textColor: Colors.white,
           fontSize: 16.0);
+
     } else {
       Fluttertoast.showToast(
           msg: "Error, Please try again!",

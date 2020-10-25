@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:test_app/functions.dart';
 import 'package:test_app/hompage.dart';
 import 'package:test_app/register.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import './forgotPassword.dart';
+import './functions.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,7 +23,7 @@ class MyApp extends StatelessWidget {
         '/register' : (BuildContext context) => new Register(),
         '/forgotPassword' : (BuildContext context) => new ForgotPasswordPage(),
       },
-      home: new LoginPage(),
+      home: LoginPage(),
     );
   }
 }
@@ -32,6 +34,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool _isLoggedin = false;
   TextEditingController usernameCTRL = TextEditingController();
   TextEditingController passwordCTRL = TextEditingController();
 
@@ -75,6 +78,18 @@ class _LoginPageState extends State<LoginPage> {
         fontSize: 16.0);
     Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
   }
+  }
+
+  void initState(){
+    checkUserLoggedInStatus();
+  }
+
+  checkUserLoggedInStatus() async{
+    HelperFunctions.getUserLoggedInDetails().then((value){
+      setState(() {
+        _isLoggedin = value;
+      });
+    });
   }
 
   @override

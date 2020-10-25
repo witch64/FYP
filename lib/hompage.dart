@@ -1,12 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:image/image.dart';
 import 'package:test_app/widgets/widgets.dart';
+import 'package:http/http.dart' as http;
+import 'package:image/image.dart' as img;
 
 import 'createPoll.dart';
 
-class MyApp extends StatelessWidget {
+class PollTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+
+    );
   }
 }
 
@@ -19,6 +26,40 @@ class _HomePageState extends State<HomePage> {
   final _HomePageForm = GlobalKey<FormState>();
   TextEditingController titleCTRL = TextEditingController();
   TextEditingController descCTRL = TextEditingController();
+
+  Stream pollStream;
+  //Widget pollList(){
+    // return Container(
+    //   child: FutureBuilder(
+    //     future: pollDetails(),
+    //     builder: (context, snapshot){
+    //       if(snapshot.hasError){
+    //         print(snapshot.error);
+    //       }
+    //       return snapshot.hasData ? ListView.builder(
+    //               itemCount: snapshot.data.length,
+    //               itemBuilder: (context, index){
+    //               List list = snapshot.data;
+    //               Image.network(
+    //                   "http://http://192.168.0.158/fyp_db/uploads/${list[index]['poll_pic']}");
+    //               return ListTile(
+    //                 title: Text(list[index]['title']),
+    //               );
+    //               })
+    //           : Center(
+    //         child: CircularProgressIndicator(),
+    //       );
+    //     },
+    //   ),
+    // );
+  //}
+
+  Future pollDetails() async{
+      var theUrl = "http://192.168.0.158/fyp_db/view.php";
+      var response = await http.get(theUrl);
+
+      return json.decode(response.body.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +78,73 @@ class _HomePageState extends State<HomePage> {
           onPressed: (){
         Navigator.push(context, MaterialPageRoute(builder: (context) => CreatePollsPage()));
           },
-          tooltip: 'Increment',
           child: Icon(Icons.add),
+        ),
+        body: Container(
+          child: ListView(
+            children: [
+              Container(
+                child: Column(
+                  children: [
+                Container(
+                  height: 2000,
+                margin: EdgeInsets.symmetric(horizontal: 24),
+                child: FutureBuilder(
+                future: pollDetails(),
+                builder: (context, snapshot){
+                  if(snapshot.hasError){
+                    print(snapshot.error);
+                  }
+                  return snapshot.hasData ? ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index){
+                        List list = snapshot.data;
+                        return ListTile(
+                            title: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Container(
+                                margin: EdgeInsets.only(bottom: 5),
+                                height: 150,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                      'http://192.168.0.158/fyp_db/uploads/${list[index]['poll_pic']}',), fit: BoxFit.cover,
+                                     )
+                                ),
+                              ),
+                            ),
+                          subtitle: Container(
+                              margin: EdgeInsets.only(bottom: 20),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.black26,
+                              ),
+                              alignment: Alignment.center,
+                              child: Column
+                                (
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(list[index]['title'],
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),)
+                                  ],
+                              )),
+                        );
+                      })
+                      : Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              ),
+        )],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
