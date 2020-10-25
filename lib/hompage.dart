@@ -81,9 +81,22 @@ class _HomePageState extends State<HomePage> {
           child: Icon(Icons.add),
         ),
         body: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [
+                    Colors.indigo,
+                    Colors.indigoAccent,
+                    Colors.deepPurpleAccent,
+                    Colors.purple,
+                  ],
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+              )
+          ),
           child: ListView(
             children: [
               Container(
+
                 child: Column(
                   children: [
                 Container(
