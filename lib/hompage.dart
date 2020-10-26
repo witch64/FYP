@@ -89,12 +89,12 @@ class _HomePageState extends State<HomePage> {
                           child: Stack(
                             children: [
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(20),
                                 child: Container(
-                                  margin: EdgeInsets.only(bottom: 10),
-                                  height: 150,
+                                  margin: EdgeInsets.only(bottom: 15),
+                                  height: 200,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
+                                      borderRadius: BorderRadius.circular(20),
                                       image: DecorationImage(
                                         image: NetworkImage(
                                           'http://192.168.0.158/fyp_db/uploads/${list[index]['poll_pic']}',), fit: BoxFit.cover,
@@ -103,9 +103,9 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Container(
-                                height: 150,
+                                height: 200,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(20),
                                   color: Colors.black26,
                                 ),
                                 alignment: Alignment.center,
@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                                           fontWeight: FontWeight.bold,
                                           shadows: <Shadow>[
                                             Shadow(
-                                              offset: Offset(3.0, 5.0),
+                                              offset: Offset(3.0, 4.0),
                                               blurRadius: 10.0,
                                               color: Colors.black,
                                             ),
