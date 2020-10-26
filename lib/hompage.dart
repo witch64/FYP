@@ -106,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                                 height: 150,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
-                                  color: Colors.black12,
+                                  color: Colors.black26,
                                 ),
                                 alignment: Alignment.center,
                                   child: Column(
@@ -120,8 +120,8 @@ class _HomePageState extends State<HomePage> {
                                           fontWeight: FontWeight.bold,
                                           shadows: <Shadow>[
                                             Shadow(
-                                              offset: Offset(3.0, 3.0),
-                                              blurRadius: 5.0,
+                                              offset: Offset(3.0, 5.0),
+                                              blurRadius: 10.0,
                                               color: Colors.black,
                                             ),
                                           ]
