@@ -64,8 +64,39 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
           backgroundColor: Colors.green,
           textColor: Colors.white,
           fontSize: 16.0);
+      sendMail();
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => LoginPage()));
+    }
+  }
+
+  sendMail() async{
+    String username = 'developertest1245@gmail.com';
+    String password = 'Zen1220!';
+    //also use for gmail smtp
+    //final smtpServer = gmail(username, password);
+
+    //user for your own domain
+    // ignore: deprecated_member_use
+    final smtpServer = gmail(username, password);
+
+    final message = Message()
+      ..from = Address(username, 'Me')
+      ..recipients.add('chnkaixin@gmail.com')
+    //..ccRecipients.addAll(['destCc1@example.com', 'destCc2@example.com'])
+    //..bccRecipients.add(Address('bccAddress@example.com'))
+      ..subject = 'Dart Mailer library :: 😀 :: ${DateTime.now()}'
+      ..text = 'This is the plain text.\nThis is line 2 of the text part.'
+      ..html = "<h1>Hi, </h1>\n<p>Your new password is </p>";
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+    } on MailerException catch (e) {
+      print('Message not sent.');
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
+      }
     }
   }
 

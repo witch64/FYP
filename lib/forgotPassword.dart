@@ -45,7 +45,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           fontSize: 16.0);
     } else {
       setState(() {
-        sendMail();
         verifyLink = json.decode(response.body.toString());
 
       });
@@ -62,43 +61,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       Navigator.push(context, MaterialPageRoute(builder: (context) => new CreateNewPasswordPage(passedValue: verifyLink)));
     }
   }
-
-  sendMail() async {
-    String username = 'chnkaixin@gmail.com';
-    String password = 'mygmailacc';
-
-    final smtpServer = mailgun(username, password);
-    // Use the SmtpServer class to configure an SMTP server:
-    // final smtpServer = SmtpServer('smtp.domain.com');
-    // See the named arguments of SmtpServer for further configuration
-    // options.
-
-    // Create our message.
-    final message = Message()
-      ..from = Address(username)
-      ..recipients.add(emailCTRL.text)
-    //..ccRecipients.addAll(['destCc1@example.com', 'destCc2@example.com'])
-    //..bccRecipients.add(Address('bccAddress@example.com'))
-      ..subject = 'Password Recover link: ${DateTime.now()}'
-    //..text = 'This is the plain text.\nThis is line 2 of the text part.'
-      ..html =
-          "<h3>Thanks! </h3>\n<p>Please click the link below to reset password.\n<a href='$verifyLink'>Click me</a></p>";
-
-    try {
-      final sendReport = await send(message, smtpServer);
-      Fluttertoast.showToast(
-          msg: "Message send. Please check your email.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.grey,
-          textColor: Colors.black,
-          fontSize: 16.0);
-      print('Message sent: ' + sendReport.toString());
-    } on MailerException catch (e) {
-      print('Message not sent. \n' + e.toString());
-      }
-    }
 
   String validateEmail(String value) {
     Pattern pattern =
