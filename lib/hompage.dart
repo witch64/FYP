@@ -85,40 +85,52 @@ class _HomePageState extends State<HomePage> {
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, index){
                         List list = snapshot.data;
-                        return ListTile(
-                            title: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Container(
-                                margin: EdgeInsets.only(bottom: 5),
-                                height: 150,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                  image: DecorationImage(
-                                    image: NetworkImage(
-                                      'http://192.168.0.158/fyp_db/uploads/${list[index]['poll_pic']}',), fit: BoxFit.cover,
-                                     )
+                        return Container(
+                          child: Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  height: 150,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      image: DecorationImage(
+                                        image: NetworkImage(
+                                          'http://192.168.0.158/fyp_db/uploads/${list[index]['poll_pic']}',), fit: BoxFit.cover,
+                                      )
+                                  ),
                                 ),
                               ),
-                            ),
-                          subtitle: Container(
-                              margin: EdgeInsets.only(bottom: 20),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.black26,
-                              ),
-                              alignment: Alignment.center,
-                              child: Column
-                                (
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(list[index]['title'],
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),)
-                                  ],
-                              )),
+                              Container(
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Colors.black12,
+                                ),
+                                alignment: Alignment.center,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(list[index]['title'],
+                                        style:
+                                        TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          shadows: <Shadow>[
+                                            Shadow(
+                                              offset: Offset(3.0, 3.0),
+                                              blurRadius: 5.0,
+                                              color: Colors.black,
+                                            ),
+                                          ]
+                                        ),),
+                                   ],
+                                  ),
+                              )
+                            ],
+                          ),
                         );
                       })
                       : Center(
