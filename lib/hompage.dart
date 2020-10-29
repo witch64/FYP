@@ -2,15 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image/image.dart';
 import 'package:test_app/startpoll.dart';
 import 'package:test_app/widgets/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:image/image.dart' as img;
 
 import 'createPoll.dart';
 
-class PollTile extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container();
@@ -23,7 +21,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _HomePageForm = GlobalKey<FormState>();
+  final _homepageForm = GlobalKey<FormState>();
   String verifyLink;
   String selectionId;
 
@@ -36,6 +34,7 @@ class _HomePageState extends State<HomePage> {
       //var response = await http.post(theUrl, body: body);
       var response = await http.get(theUrl);
 
+      //print( json.decode(response.body.toString()));
       return json.decode(response.body.toString());
   }
 
@@ -46,7 +45,7 @@ class _HomePageState extends State<HomePage> {
     };
 
     var response = await http.post(theUrl, body: data);
-    print(response.body.toString());
+    //print(response.body.toString());
 
     if (json.decode(response.body.toString()) == "INVALID POLL") {
       Fluttertoast.showToast(
@@ -59,7 +58,7 @@ class _HomePageState extends State<HomePage> {
           fontSize: 16.0);
     }else{
       setState(() {
-        verifyLink = response.body.toString();
+        verifyLink = json.decode(response.body.toString());
       });
     }
   }
@@ -67,7 +66,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return new Form(
-      key: _HomePageForm,
+      key: _homepageForm,
       child: Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -104,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                 GestureDetector(
                   onTap:(){
                     nextPage(selectionId);
-                    //Navigator.push(context, MaterialPageRoute(builder: (context) => StartPollPage(selectionId)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => StartPollPage(passedValue: verifyLink)));
                   },
                   child: Container(
                     height: 2000,

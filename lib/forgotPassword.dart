@@ -62,16 +62,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     }
   }
 
-  String validateEmail(String value) {
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern);
-    if (!regex.hasMatch(value))
-      return 'Please Enter Valid Email';
-    else
-      return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -122,9 +112,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Please enter email';
-                      }else if(value.isNotEmpty){
-                        validateEmail(value);
-                      }
+                      }//else if(value.isNotEmpty){
+                      //   validateEmail(value);
+                      // }
                       return null;
                     },
                   ),
