@@ -1,18 +1,22 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:test_app/widgets/widgets.dart';
 import 'package:http/http.dart' as http;
 
 class StartPollPage extends StatefulWidget {
   String passedValue = "";
-  StartPollPage({Key  key, this.passedValue}) : super(key: key);
+
+  StartPollPage({Key key, this.passedValue}) : super(key: key);
+
   @override
   _StartPollPageState createState() => _StartPollPageState(passedValue);
 }
 
 class _StartPollPageState extends State<StartPollPage> {
-  int _currentStep = 0;
   String passedValue = "";
+  double option1, option2, option3, option4 = 0;
+
   _StartPollPageState(this.passedValue);
 
   Future selectionDetails() async {
@@ -25,8 +29,6 @@ class _StartPollPageState extends State<StartPollPage> {
 
     //print(json.decode(response.body.toString()));
     return json.decode(response.body.toString());
-
-
   }
 
   @override
@@ -43,100 +45,222 @@ class _StartPollPageState extends State<StartPollPage> {
         height: 2000,
         decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                Colors.indigo,
-                Colors.indigoAccent,
-                Colors.deepPurpleAccent,
-                Colors.purple,
-              ],
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
-            )
-        ),
-        child:Container(
-            child: Stepper(
-              type: StepperType.horizontal,
-              steps: _mySteps(),
-              currentStep: this._currentStep,
-              onStepContinue: (){
-                setState(() {
-                  if(this._currentStep < this._mySteps().length - 1){
-                  this._currentStep = this._currentStep + 1;
-                  }else{
-                    print('Completed');
-                  }
-                });
-              },
-              onStepCancel: (){
-                setState(() {
-                  if(this._currentStep > 0){
-                    this._currentStep = this._currentStep - 1;
-                  }else{
-                    this._currentStep = 0;
-                  }
-                });
-              },
-            ),
-          ),
-        ),
-      );
-  }
-
-  List<Step> _mySteps(){
-    List<Step> _steps = [
-      Step(
-        title: Text('Step 1'),
-        content:TextField(),
-        isActive: _currentStep >= 0,
+          colors: [
+            Colors.indigo,
+            Colors.indigoAccent,
+            Colors.deepPurpleAccent,
+            Colors.purple,
+          ],
+          begin: Alignment.bottomLeft,
+          end: Alignment.topRight,
+        )),
+        child: Container(
+            child: FutureBuilder(
+          future: selectionDetails(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              print(snapshot.error);
+            }
+            return snapshot.hasData
+                ? ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index) {
+                      List list = snapshot.data;
+                      return Container(
+                        margin: EdgeInsets.only(
+                            left: 10.0, top: 10.0, right: 10.0, bottom: 10.0),
+                        child: Column(
+                          children: [
+                            Card(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                padding: EdgeInsets.all(10),
+                                child: Text(
+                                  list[index]["title"],
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.teal,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 10,),
+                            IntrinsicHeight(
+                                child: Column(
+                                  children: [
+                                    Card(
+                                      child: Container(
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              constraints:
+                                              BoxConstraints(minHeight: 70),
+                                              width: 8,
+                                              color: Colors.green,
+                                            ),
+                                            Expanded(
+                                              child: InkWell(
+                                                onTap: () {
+                                                  Fluttertoast.showToast(
+                                                      msg: "Testing 123 ...",
+                                                      toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                      gravity: ToastGravity.CENTER,
+                                                      timeInSecForIosWeb: 1,
+                                                      backgroundColor: Colors.red,
+                                                      textColor: Colors.white,
+                                                      fontSize: 16.0);
+                                                },
+                                                child: Container(
+                                                  alignment: Alignment.centerLeft,
+                                                  padding: EdgeInsets.all(10),
+                                                  child: Text(
+                                                    list[index]["option_1"],
+                                                    maxLines: 5,
+                                                    style: TextStyle(fontSize: 22),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10,),
+                                    Card(
+                                      child: Container(
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              constraints:
+                                              BoxConstraints(minHeight: 70),
+                                              width: 8,
+                                              color: Colors.green,
+                                            ),
+                                            Expanded(
+                                              child: InkWell(
+                                                onTap: () {
+                                                  Fluttertoast.showToast(
+                                                      msg: "Testing 123 ...",
+                                                      toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                      gravity: ToastGravity.CENTER,
+                                                      timeInSecForIosWeb: 1,
+                                                      backgroundColor: Colors.red,
+                                                      textColor: Colors.white,
+                                                      fontSize: 16.0);
+                                                },
+                                                child: Container(
+                                                  alignment: Alignment.centerLeft,
+                                                  padding: EdgeInsets.all(10),
+                                                  child: Text(
+                                                    list[index]["option_2"],
+                                                    maxLines: 5,
+                                                    style: TextStyle(fontSize: 22),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10,),
+                                    Card(
+                                      child: Container(
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              constraints:
+                                              BoxConstraints(minHeight: 70),
+                                              width: 8,
+                                              color: Colors.green,
+                                            ),
+                                            Expanded(
+                                              child: InkWell(
+                                                onTap: () {
+                                                  Fluttertoast.showToast(
+                                                      msg: "Testing 123 ...",
+                                                      toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                      gravity: ToastGravity.CENTER,
+                                                      timeInSecForIosWeb: 1,
+                                                      backgroundColor: Colors.red,
+                                                      textColor: Colors.white,
+                                                      fontSize: 16.0);
+                                                },
+                                                child: Container(
+                                                  alignment: Alignment.centerLeft,
+                                                  padding: EdgeInsets.all(10),
+                                                  child: Text(
+                                                    list[index]["option_3"],
+                                                    maxLines: 5,
+                                                    style: TextStyle(fontSize: 22),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10,),
+                                    Card(
+                                      child: Container(
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              constraints:
+                                              BoxConstraints(minHeight: 70),
+                                              width: 8,
+                                              color: Colors.green,
+                                            ),
+                                            Expanded(
+                                              child: InkWell(
+                                                onTap: () {
+                                                  Fluttertoast.showToast(
+                                                      msg: "Testing 123 ...",
+                                                      toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                      gravity: ToastGravity.CENTER,
+                                                      timeInSecForIosWeb: 1,
+                                                      backgroundColor: Colors.red,
+                                                      textColor: Colors.white,
+                                                      fontSize: 16.0);
+                                                },
+                                                child: Container(
+                                                  alignment: Alignment.centerLeft,
+                                                  padding: EdgeInsets.all(10),
+                                                  child: Text(
+                                                    list[index]["option_4"],
+                                                    maxLines: 5,
+                                                    style: TextStyle(fontSize: 22),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 10,),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        ),
+                      );
+                    },
+                  )
+                : Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.cyanAccent,
+                      valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+                    ),);
+          },
+        )),
       ),
-      Step(
-        title: Text('Step 2'),
-        content:TextField(),
-        isActive: _currentStep >= 1,
-      )
-    ];
-    return _steps;
+    );
   }
-
-  // child: FutureBuilder(
-  // future: selectionDetails(),
-  // builder: (context, snapshot){
-  // if(snapshot.hasError){
-  // print(snapshot.error);
-  // }
-  // return snapshot.hasData ? ListView.builder(
-  // itemCount: snapshot.data.length,
-  // itemBuilder: (context, index){
-  // List list = snapshot.data;
-  // return Container(
-  // child: Column(
-  // children: [
-  // Text(list[index]["option_1"],  style:
-  // TextStyle(
-  // color: Colors.white,
-  // fontSize: 20,
-  // fontWeight: FontWeight.bold)),
-  // Text(list[index]["option_2"],style:
-  // TextStyle(
-  // color: Colors.white,
-  // fontSize: 20,
-  // fontWeight: FontWeight.bold)),
-  // Text(list[index]["option_3"],style:
-  // TextStyle(
-  // color: Colors.white,
-  // fontSize: 20,
-  // fontWeight: FontWeight.bold)),
-  // Text(list[index]["option_4"],style:
-  // TextStyle(
-  // color: Colors.white,
-  // fontSize: 20,
-  // fontWeight: FontWeight.bold)),
-  // ],
-  // ),
-  // );
-  // }): Center(
-  // child: CircularProgressIndicator(),
-  // );
-  // },
-  // )
 }
